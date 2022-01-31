@@ -1,32 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 
+const endpoint = 'https://api.github.com/users/rabit1977';
+
 function App() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    document.addEventListener('mousemove', handleMouseMove);
-    return () => {
-        document.removeEventListener('mousemove', handleMouseMove)
-    }
+    fetch(endpoint)
+      .then((response) => response.json())
+      .then((data) => setUser(data));
   }, []);
 
-  function handleMouseMove(event) {
-    setMousePosition({ x: event.pageX, y: event.pageY });
-  }
-
-  return (
-    <div>
-      <p>x: {mousePosition.x}</p>
-      <p>y: {mousePosition.y}</p>
-    </div>
+  return user ? (
+    <>
+      <div>{user.name}</div>
+      <div>{user.location}</div>
+      <div>{user.bio}</div>
+      <div>{user.followers}</div>
+      <div>{user.follow}</div>
+      <img src={user.avatar_url} style={{ height: 50 }} alt='' />
+    </>
+  ) : (
+    <p>...Loading</p>
   );
 }
 
 const rootNode = document.getElementById('root');
 ReactDOM.render(<App />, rootNode);
-
-function NewPage() {
-  return <div>new page</div>;
-}
-setTimeout(() => ReactDOM.render(<NewPage />, rootNode), 2000);
