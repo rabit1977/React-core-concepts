@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 function App() {
   const [developer, setDeveloper] = useState({
+    name: '',
     language: 'React',
     yearsExperience: 0,
     isEmployed: false,
@@ -10,6 +11,14 @@ function App() {
 
   //   const [language, setLanguage] = useState('javaScript');
   //   const [yearsExperience, setYearsExperience] = useState(0);
+
+  useEffect(() => {
+    document.title = developer.name;
+    console.log('runs');
+  }, [developer.name]);
+  function handleChangeName(event) {
+    setDeveloper({ ...developer, name: event.target.value });
+  }
   function handleChangeLanguage(event) {
     setDeveloper({
       language: 'javaScript',
@@ -32,6 +41,13 @@ function App() {
       <button onClick={handleChangeLanguage}>Change Language</button>
       <div>
         <input type='number' onChange={handleChangeYearsExperience} />
+      </div>
+      <div>
+        <input
+          type='text'
+          onChange={handleChangeName}
+          placeholder='change name'
+        />
       </div>
       <p>I am learning {developer.language}</p>
       <p>I have {developer.yearsExperience} years of experience</p>
