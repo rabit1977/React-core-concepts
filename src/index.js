@@ -1,27 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
 function App() {
-  const people = ['Jane', 'John', 'Sime'];
-  function handleInputChange(event) {
-    const inputValue = event.target.value;
-    console.log(inputValue);
-  }
+  const [language, setLanguage] = useState('javaScript');
+  const [yearsExperience, setYearsExperience] = useState(0);
+
   return (
-    <ul>
-      {people.map((person, i) => (
-        <Person key={i} person={person} />
-      ))}
-      <input type='text' onChange={handleInputChange} />
-    </ul>
+    <div>
+      <button onClick={() => setLanguage('python')}>Change Language</button>
+
+      <div>
+        <input
+          type='number'
+          onChange={(event) => setYearsExperience(event.target.value)}
+        />
+      </div>
+      <p>I am learning {language}</p>
+      <p>I have {yearsExperience} years of experience</p>
+    </div>
   );
-}
-function Person({ person }) {
-  function handlePersonClick(event) {
-    alert(person);
-    console.log(event);
-  }
-  return <li onClick={handlePersonClick}>{person}</li>;
 }
 
 const rootNode = document.getElementById('root');
