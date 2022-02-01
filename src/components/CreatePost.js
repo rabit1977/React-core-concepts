@@ -1,34 +1,39 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
-function CreatePost() {
+function CreatePost({ user, setPosts, posts }) {
   const [content, setContent] = useState('');
   const [image, setImage] = useState(null);
+  const imageInputRef = useRef();
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    const post = { content, image, user };
+    const newPosts = [post, ...posts];
+    setPosts(newPosts);
+    setContent('');
+    imageInputRef.current.value = '';
+  }
 
   return (
     <div>
       <h1>Create New Post</h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         <input
           type='text'
           placeholder='Add Post Content'
           onChange={(event) => setContent(event.target.value)}
+          value={content}
         />
         <br />
         <br />
         <input
           type='file'
           onChange={(event) => setImage(event.target.files[0])}
+          ref={imageInputRef}
         />
         <button type='submit'>Submit Post</button>
       </form>
       <p>{content}</p>
-      {image && (
-        <img
-          style={{ height: 100, width: 200, objectFit: 'cover' }}
-          src={URL.createObjectURL(image)}
-          alt=''
-        />
-      )}
     </div>
   );
 }
