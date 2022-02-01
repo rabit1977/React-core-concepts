@@ -1,15 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Header from './components/Header';
 import Login from './components/Login';
 import CreatePost from './components/CreatePost';
+import PostList from './components/PostList';
+
+const functionsCount = new Set();
 
 function App() {
   const [user, setUser] = useState('ebibi');
   const [posts, setPosts] = useState([]);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     document.title = user ? `${user}'s Feed` : 'Please login';
   }, [user]);
+
+  const handleAddPost = useCallback(
+    (newPost) => {
+      setPosts([newPost, ...posts]);
+    },
+    [posts]
+  );
+
+  functionsCount.add(handleAddPost);
+  console.log(functionsCount);
 
   if (!user) {
     return <Login setUser={setUser} />;
@@ -18,20 +32,9 @@ function App() {
   return (
     <div>
       <Header user={user} setUser={setUser} />
-      <CreatePost user={user} setPosts={setPosts} posts={posts} />
-      {posts.map((post, i) => (
-        <React.Fragment key={i}>
-          {post.image && (
-            <img
-              style={{ height: 100, width: 200, objectFit: 'cover' }}
-              src={URL.createObjectURL(post.image)}
-              alt='Post cover'
-            />
-          )}
-          <p>{post.content}</p>
-          <div>{user}</div>
-        </React.Fragment>
-      ))}
+      <CreatePost user={user} handleAddPost={handleAddPost} />
+      <PostList posts={posts} />
+      <button onClick={() => setCount((prev) => prev + 1)}>{count} +</button>
     </div>
   );
 }
