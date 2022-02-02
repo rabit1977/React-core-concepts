@@ -1,6 +1,8 @@
 import React from 'react';
 
-function Post({ image, content, user }) {
+function Post({ image, content, user, currentUser }) {
+  const isCurrentUser = currentUser === user;
+
   return (
     <>
       {image && (
@@ -11,7 +13,7 @@ function Post({ image, content, user }) {
         />
       )}
       <p>{content}</p>
-      <div>{user}</div>
+      <div style={{ color: isCurrentUser && 'green' }}>{user}</div>
     </>
   );
 }
